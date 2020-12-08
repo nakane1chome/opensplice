@@ -77,7 +77,8 @@ export_vars
 if [ "$CONFIGURATION" != "OK" ]
 then
     cleanup
-    return 1
+    echo "exit with CONFIGURATION=$CONFIGURATION"
+    exit 0
 fi
 
 get_abstraction_header_dirs
