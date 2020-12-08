@@ -765,7 +765,7 @@ javac_check_darwin ()
     set_var JAVA_HOME "$JAVA_HOME"
 
     JAVAC_EXE=javac
-    "$JAVAC_EXE" -version 2> javac.ver
+    "$JAVAC_EXE" -version | cut -f1-2 -d. 2> javac.ver
     JAVAC_REAL_VERSION=`cat javac.ver | grep "javac" | head -1 | awk '{ print $2 }'`
     JAVAC_VERSION=`echo $JAVAC_REAL_VERSION | awk -F'.' '{ print $1"."$2 }' | sed -e 's;\.;0;g'`
     rm -f javac.ver
@@ -839,19 +839,22 @@ javac_check ()
         JAVAC_EXE=`readlink -f "$T_JAVAC_EXE"`
     fi
 
-    "$JAVAC_EXE" -version 2> javac.ver
+    "$JAVAC_EXE" -version | cut -f1-2 -d. 2> javac.ver
     JAVAC_REAL_VERSION=`cat javac.ver | grep "javac" | head -1 | awk '{ print $2 }'`
     JAVAC_VERSION=`echo $JAVAC_REAL_VERSION | awk -F'.' '{ print $1"."$2 }' | sed -e 's;\.;0;g'`
     rm -f javac.ver
     if [ -n "$JAVAC_VERSION" ]
     then
+    echo "$JAVAC_VERSION" -ge "$REQUIRED_VERSION"
         if [ "$JAVAC_VERSION" -ge "$REQUIRED_VERSION" ]
         then
             JAVA_HOME=`echo "$JAVAC_EXE" | sed 's@/bin/javac$@@' `
             set_var JAVA_HOME "$JAVA_HOME"
         else
-            echo "ERROR - Only Oracle JAVA 1.6 and above is supported"
-            return 1
+            echo "ERROR (WARN!!) - Only Oracle JAVA 1.6 and above is supported"
+            JAVA_HOME=`echo "$JAVAC_EXE" | sed 's@/bin/javac$@@' `
+            set_var JAVA_HOME "$JAVA_HOME"
+            #return 1
         fi
     else
         echo "ERROR - Only Oracle JAVA 1.6 and above is supported"
