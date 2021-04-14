@@ -348,4 +348,5 @@ endif
 
 ifeq "$(findstring zzzz, $(MAKECMDGOALS))" ""
 -include $(ST1_DEPS) $(ODLPP_DEPS) $(ST2_DEPS)
+$(info DEPSINNER $(ST1_DEPS) $(ODLPP_DEPS) $(ST2_DEPS))
 endif

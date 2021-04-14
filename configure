@@ -58,6 +58,7 @@ else
     TEST=$?
     if [ "$TEST" = "1" ]
     then
+        echo "Options Failed: ${OPTIONS}"
         return
     fi
 fi

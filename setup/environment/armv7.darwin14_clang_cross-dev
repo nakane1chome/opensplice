@@ -1,0 +1,1 @@
+. "$OSPL_HOME/setup/environment/darwin14-common" armv7 _clang dev

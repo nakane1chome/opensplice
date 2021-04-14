@@ -44,7 +44,10 @@ extern "C" {
 #define OS_SOCKET_USE_FCNTL 1
 #define OS_SOCKET_USE_IOCTL 0
 #define OS_HAS_UCONTEXT_T
+
+#ifndef __ARM_ARCH
 #define OS_HAS_TSD_USING_THREAD_KEYWORD 1
+#endif
 
 #if defined (__cplusplus)
 }

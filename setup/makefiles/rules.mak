@@ -1,7 +1,9 @@
 ifneq (,$(wildcard $(OSPL_HOME)/setup/$(SPLICE_TARGET)))
-include $(OSPL_HOME)/setup/$(SPLICE_TARGET)/config.mak
+include  $(OSPL_HOME)/setup/$(SPLICE_TARGET)/config.mak
+$(info INCLUDE INNER $(OSPL_HOME)/setup/$(SPLICE_TARGET)/config.mak)
 else
-include $(OSPL_OUTER_HOME)/setup/$(SPLICE_TARGET)/config.mak
+include  $(OSPL_OUTER_HOME)/setup/$(SPLICE_TARGET)/config.mak
+$(info INCLUDE OUTER $(OSPL_OUTER_HOME)/setup/$(SPLICE_TARGET)/config.mak)
 endif
 
 # This makefile defined the platform and component independent make rules.
@@ -172,28 +174,31 @@ endif
 # back to using the relative paths we have been using until now.
 ifeq "$(abspath /)"""
 %$(OBJ_POSTFIX): %.c
-	@$(ECHO_COMMAND) $(CC) $<
+	@$(ECHO_COMMAND) TARGET1 $(CC) $<
 	$(AT_SIGN)$(CC) $(CPPFLAGS) $(CFLAGS) $(CINCS) -o $@ -c $<
 
 %$(OBJ_POSTFIX): %.cpp
-	@$(ECHO_COMMAND) $(CXX) $<
+	@$(ECHO_COMMAND) TARGET2 $(CXX) $<
 	$(AT_SIGN)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CXXINCS) -o $@ -c $<
 
 %$(OBJ_POSTFIX): %.cc
-	@$(ECHO_COMMAND) $(CXX) $<
+	@$(ECHO_COMMAND) TARGET3 $(CXX) $<
 	$(AT_SIGN)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CXXINCS) -o $@ -c $<
 else
+
+CFLAGS		 := $(CFLAGS_OPT) $(CFLAGS_DEBUG) $(CFLAGS_STRICT) $(MTCFLAGS)
+
 %$(OBJ_POSTFIX): %.c
-	@$(ECHO_COMMAND) $(CC) $<
-	$(AT_SIGN)$(CC) $(CPPFLAGS) $(CFLAGS) $(CINCS) -o $@ -c $(abspath $<)
+	@$(ECHO_COMMAND) TARGET4 $(CC) $< ${CURDIR} : ${CFLAGS} : ${CFLAGS_STRICT}
+	$(AT_SIGN)$(CC) $(CPPFLAGS) $(CFLAGS) ${CFLAGS_STRICT} $(CINCS) -o $@ -c $(abspath $<)
 
 %$(OBJ_POSTFIX): %.cpp
-	@$(ECHO_COMMAND) $(CXX) $<
-	$(AT_SIGN)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CXXINCS) -o $@ -c $(abspath $<)
+	@$(ECHO_COMMAND) TARGET5 $(CXX) $<
+	$(AT_SIGN)$(CXX) $(CPPFLAGS) $(CXXFLAGS) ${CFLAGS_OPT}  $(CXXINCS) -o $@ -c $(abspath $<)
 
 %$(OBJ_POSTFIX): %.cc
-	@$(ECHO_COMMAND) $(CXX) $<
-	$(AT_SIGN)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CXXINCS) -o $@  -c $(abspath $<)
+	@$(ECHO_COMMAND) TARGET6 $(CXX) $<
+	$(AT_SIGN)$(CXX) $(CPPFLAGS) $(CXXFLAGS) ${CFLAGS_OPT}  $(CXXINCS) -o $@  -c $(abspath $<)
 endif
 
 %.c: %.y

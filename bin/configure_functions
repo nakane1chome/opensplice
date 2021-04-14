@@ -317,7 +317,7 @@ set_target_alternate ()
     if [ ! -f "$FIRST_HOME/setup/environment/${SPLICE_TARGET_ENV}" -a \
         ! -f "$SECOND_HOME/setup/environment/${SPLICE_TARGET_ENV}" ]
     then
-    echo "Specified envionment \"${SPLICE_TARGET_ENV}\" is not supported"
+    echo "Specified target environment \"${SPLICE_TARGET_ENV}\" is not supported (not found in $FIRST_HOME/setup/environment/ or $SECOND_HOME/setup/environment)"
         echo
         return 1
     fi
